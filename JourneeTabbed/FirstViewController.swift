@@ -15,11 +15,14 @@ import FirebaseDatabase
 
 
 class FirstViewController: UIViewController ,GMSMapViewDelegate{
+
+    
     @IBOutlet weak var mapView: GMSMapView!
     private let locationManager=CLLocationManager();
     var ref: DatabaseReference!
     private var infoWindow = MapMarkerWindow()
     fileprivate var locationMarker : GMSMarker? = GMSMarker()
+    //var delegate: MapMarkerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,9 +30,10 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         ref=Database.database().reference()
-        self.infoWindow = loadNiB()
+        
         loadMarkersFromDB()
-    
+        self.infoWindow = loadNiB()
+        mapView.delegate=self
     }
     
     
@@ -71,10 +75,12 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+       
         var markerData : NSDictionary?
         if let data = marker.userData! as? NSDictionary {
             markerData = data
         }
+        print("Am ajuns aici!")
         locationMarker = marker
         infoWindow.removeFromSuperview()
         infoWindow = loadNiB()
@@ -84,7 +90,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         }
         // Pass the spot data to the info window, and set its delegate to self
         infoWindow.spotData = markerData
-        infoWindow.delegate = self.infoWindow.delegate
+      //  infoWindow.setDelegate(self, mapDelegate: self)
+       // infoWindow.delegate = self as? MapMarkerDelegate
+        
         // Configure UI properties of info window
         infoWindow.alpha = 0.9
         infoWindow.layer.cornerRadius = 12
@@ -95,16 +103,39 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
        // let address = markerData!["address"]!
         let name = markerData!["name"]!
         let dateVisited = markerData!["date"]!
-        print(name as? String)
-        print(dateVisited as? String)
-       // infoWindow.addressLabel.text = address as? String
         infoWindow.placeNameLabel.text=name as? String
         infoWindow.dateVisitedLabel.text=dateVisited as? String
+        let geocoder = GMSGeocoder()
+        let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
+       /*var currentAddress = String()
+
+       geocoder.reverseGeocodeCoordinate(coordinate) { response , error in
+           if let address = response?.firstResult() {
+               let lines = address.lines! as [String]
+
+               currentAddress = lines.joinWithSeparator("\n")
+
+               currentAdd(returnAddress: currentAddress)
+           }
+        }
+        */
        
+        geocoder.reverseGeocodeCoordinate(position) { response, error in
+        if let location = response?.firstResult() {
+            let marker = GMSMarker(position: position)
+            let lines = location.lines! as [String]
+
+           var currentAdress = response?.firstResult()?.thoroughfare! as! String
+            self.infoWindow.addressLabel.text=currentAdress
+            print("Adresa: " + currentAdress)
+            }
+        }
+        //infoWindow.addressLabel.text=currentAdress as! String
         // Offset the info window to be directly above the tapped marker
         infoWindow.center = mapView.projection.point(for: location)
         infoWindow.center.y = infoWindow.center.y - 82
         self.view.addSubview(infoWindow)
+        print("Info window added")
         return false
     }
     
@@ -122,6 +153,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         infoWindow.removeFromSuperview()
     }
+    
+       
   
 }
 // MARK: - CLLocationManagerDelegate
