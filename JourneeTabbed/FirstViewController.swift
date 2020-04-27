@@ -22,6 +22,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     var ref: DatabaseReference!
     private var infoWindow = MapMarkerWindow()
     fileprivate var locationMarker : GMSMarker? = GMSMarker()
+    var markerAdded = GMSMarker()
     //var delegate: MapMarkerDelegate?
     
     override func viewDidLoad() {
@@ -41,6 +42,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         let infoWindow = MapMarkerWindow.instanceFromNib() as! MapMarkerWindow
         return infoWindow
     }
+    
     
     
    func loadMarkersFromDB() {
@@ -76,10 +78,20 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
        
+        var hasData = true
         var markerData : NSDictionary?
+        if marker.userData == nil {
+            print("NU AM DATE")
+           // return false
+            hasData = false
+        }
+        if hasData==true{
         if let data = marker.userData! as? NSDictionary {
             markerData = data
+            }
+            
         }
+       
         print("Am ajuns aici!")
         locationMarker = marker
         infoWindow.removeFromSuperview()
@@ -89,7 +101,10 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             return false
         }
         // Pass the spot data to the info window, and set its delegate to self
-        infoWindow.spotData = markerData
+        if hasData==true{
+            infoWindow.spotData = markerData
+            
+        }
       //  infoWindow.setDelegate(self, mapDelegate: self)
        // infoWindow.delegate = self as? MapMarkerDelegate
         
@@ -101,34 +116,36 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.addVisitButton.layer.cornerRadius = infoWindow.addVisitButton.frame.height / 2
             
        // let address = markerData!["address"]!
+        if hasData==true{
         let name = markerData!["name"]!
         let dateVisited = markerData!["date"]!
         infoWindow.placeNameLabel.text=name as? String
         infoWindow.dateVisitedLabel.text=dateVisited as? String
+        infoWindow.notVisitedLabel.isHidden = true;
         let geocoder = GMSGeocoder()
-        let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
-       /*var currentAddress = String()
-
-       geocoder.reverseGeocodeCoordinate(coordinate) { response , error in
-           if let address = response?.firstResult() {
-               let lines = address.lines! as [String]
-
-               currentAddress = lines.joinWithSeparator("\n")
-
-               currentAdd(returnAddress: currentAddress)
-           }
-        }
-        */
-       
+            let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
+            
+        
         geocoder.reverseGeocodeCoordinate(position) { response, error in
-        if let location = response?.firstResult() {
-            let marker = GMSMarker(position: position)
-            let lines = location.lines! as [String]
-
+            if (response?.firstResult()) != nil {
            var currentAdress = response?.firstResult()?.thoroughfare! as! String
             self.infoWindow.addressLabel.text=currentAdress
             print("Adresa: " + currentAdress)
             }
+        }
+        }
+        else{
+            let geocoder = GMSGeocoder()
+            let position = CLLocationCoordinate2DMake(marker.position.latitude as! CLLocationDegrees,marker.position.longitude as! CLLocationDegrees)
+            geocoder.reverseGeocodeCoordinate(position) { response, error in
+                if (response?.firstResult()) != nil {
+               var currentAdress = response?.firstResult()?.thoroughfare! as! String
+                self.infoWindow.addressLabel.text=currentAdress
+                print("Adresa: " + currentAdress)
+                }
+            }
+            infoWindow.placeNameLabel.text="";
+            infoWindow.dateVisitedLabel.text="";
         }
         //infoWindow.addressLabel.text=currentAdress as! String
         // Offset the info window to be directly above the tapped marker
@@ -154,9 +171,27 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.removeFromSuperview()
     }
     
-       
+       func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+            // Custom logic here
+        print("LONG PRESS")
+            
+            markerAdded.position = coordinate
+         let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(markerAdded.position) { response, error in
+            if (response?.firstResult()) != nil {
+                self.markerAdded.title=response?.firstResult()?.thoroughfare! as! String
+              
+                  }
+              }
+           // marker.title = "I added this with a long tap"
+            markerAdded.snippet = ""
+            markerAdded.map = mapView
+       }
   
 }
+
+
+
 // MARK: - CLLocationManagerDelegate
 //1
 extension FirstViewController: CLLocationManagerDelegate {
