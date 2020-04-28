@@ -76,6 +76,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             }, withCancel: nil)
         }
     
+    @objc func addVisit(sender: UIButton){
+        print("Am intrat in functie!!!")
+    }
+
+    
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
        
         var hasData = true
@@ -89,10 +94,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         if let data = marker.userData! as? NSDictionary {
             markerData = data
             }
-            
         }
        
-        print("Am ajuns aici!")
+        //print("Am ajuns aici!")
         locationMarker = marker
         infoWindow.removeFromSuperview()
         infoWindow = loadNiB()
@@ -116,27 +120,18 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.addVisitButton.layer.cornerRadius = infoWindow.addVisitButton.frame.height / 2
             
        // let address = markerData!["address"]!
-        if hasData==true{
-        let name = markerData!["name"]!
-        let dateVisited = markerData!["date"]!
-        infoWindow.placeNameLabel.text=name as? String
-        infoWindow.dateVisitedLabel.text=dateVisited as? String
-        infoWindow.notVisitedLabel.isHidden = true;
-        let geocoder = GMSGeocoder()
-            let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
-            
-        
-        geocoder.reverseGeocodeCoordinate(position) { response, error in
-            if (response?.firstResult()) != nil {
-           var currentAdress = response?.firstResult()?.thoroughfare! as! String
-            self.infoWindow.addressLabel.text=currentAdress
-            print("Adresa: " + currentAdress)
-            }
-        }
-        }
-        else{
+        if hasData==true
+        {
+            let name = markerData!["name"]!
+            let dateVisited = markerData!["date"]!
+            infoWindow.placeNameLabel.text=name as? String
+            infoWindow.dateVisitedLabel.text=dateVisited as? String
+            infoWindow.notVisitedLabel.isHidden = true;
+            infoWindow.addVisitButton.isHidden = true
             let geocoder = GMSGeocoder()
-            let position = CLLocationCoordinate2DMake(marker.position.latitude as! CLLocationDegrees,marker.position.longitude as! CLLocationDegrees)
+                let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
+                
+            
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil {
                var currentAdress = response?.firstResult()?.thoroughfare! as! String
@@ -144,8 +139,22 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                 print("Adresa: " + currentAdress)
                 }
             }
+        }
+        else
+        {
+            let geocoder = GMSGeocoder()
+            let position = CLLocationCoordinate2DMake(marker.position.latitude as! CLLocationDegrees,marker.position.longitude as! CLLocationDegrees)
+            geocoder.reverseGeocodeCoordinate(position) { response, error in
+                if (response?.firstResult()) != nil
+                {
+                   var currentAdress = response?.firstResult()?.thoroughfare! as! String
+                    self.infoWindow.addressLabel.text=currentAdress
+                    print("Adresa: " + currentAdress)
+                }
+            }
             infoWindow.placeNameLabel.text="";
             infoWindow.dateVisitedLabel.text="";
+            infoWindow.addVisitButton.addTarget(self,action:#selector(addVisit(sender:)), for: .touchUpInside)
         }
         //infoWindow.addressLabel.text=currentAdress as! String
         // Offset the info window to be directly above the tapped marker
@@ -156,6 +165,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         return false
     }
     
+        
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         if (locationMarker != nil){
             guard let location = locationMarker?.position else {
