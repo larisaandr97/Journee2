@@ -13,11 +13,11 @@
             <objects>
                 <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lZy-G2-yR9" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
                         </subviews>
@@ -57,6 +57,9 @@
                                 <state key="normal" title="Save">
                                     <color key="titleColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="saveVisit:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="sBf-Ma-lwM"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gp1-La-NXO">
                                 <rect key="frame" x="62" y="756" width="55" height="39"/>
@@ -234,6 +237,7 @@
                         <outlet property="descriptionField" destination="gRt-8S-Qmd" id="jzx-Uj-gyz"/>
                         <outlet property="placeNameField" destination="7H2-U6-5bb" id="Bag-X6-HCh"/>
                         <outlet property="starStackView" destination="iHu-Sz-i9p" id="MQg-ir-LEA"/>
+                        <segue destination="9pv-A4-QxB" kind="showDetail" identifier="savedVisit" id="uPm-Sd-sPZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
@@ -301,6 +305,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="lzU-1b-eKA"/>
+        <segue reference="uPm-Sd-sPZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="add-48" width="48" height="48"/>

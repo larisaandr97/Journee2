@@ -23,6 +23,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     private var infoWindow = MapMarkerWindow()
     fileprivate var locationMarker : GMSMarker? = GMSMarker()
     var markerAdded = GMSMarker()
+    var saved = false
     //var delegate: MapMarkerDelegate?
     
     override func viewDidLoad() {
@@ -35,6 +36,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
+      /*  if saved == true {
+            showToast(message: "Saved!", font: UIFont(name: "Times New Roman", size: 19.0)!)
+            print("Salvat!")
+        }
+        saved = false*/
        
     }
     
@@ -248,3 +254,24 @@ extension FirstViewController: CLLocationManagerDelegate {
 }
 
 
+extension UIViewController {
+
+func showToast(message : String, font: UIFont) {
+
+    let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+    toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+    toastLabel.textColor = UIColor.white
+    toastLabel.font = font
+    toastLabel.textAlignment = .center;
+    toastLabel.text = message
+    toastLabel.alpha = 1.0
+    toastLabel.layer.cornerRadius = 10;
+    toastLabel.clipsToBounds  =  true
+    self.view.addSubview(toastLabel)
+    //UIApplication.shared.keyWindow?.addSubview(toastLabel)
+    UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+         toastLabel.alpha = 0.0
+    }, completion: {(isCompleted) in
+        toastLabel.removeFromSuperview()
+    })
+} }

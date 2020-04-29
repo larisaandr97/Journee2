@@ -10,4 +10,5 @@ target 'JourneeTabbed' do
   pod 'Firebase/Database'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'TinyConstraints'
 end

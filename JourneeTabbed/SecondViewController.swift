@@ -26,16 +26,32 @@ class SecondViewController: UIViewController {
     var intStars = 5
     var intRate: Int = 0
     var address: String="";
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         adressLabel.text = address
         setStarStack()
     }
     
-    @IBAction func chooseImage(_ sender: Any) {
-      //  showImagePickerController()
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is FirstViewController
+        {
+            let vc = segue.destination as? FirstViewController
+            vc?.saved = true
+           // vc?.address = infoWindow.addressLabel.text! as String
+        }
     }
+    
+    @IBAction func saveVisit(_ sender: Any) {
+          performSegue(withIdentifier: "savedVisit", sender: sender);
+        
+    }
+    @IBAction func chooseImage(_ sender: Any) {
+        showImagePickerController()
+        //showChooseSourceTypeAlertController()
+    }
+    
     func setStarStack(){
         starStackView.axis = NSLayoutConstraint.Axis.horizontal
         starStackView.distribution = .fillEqually
@@ -94,37 +110,34 @@ class SecondViewController: UIViewController {
    
 
 }
-extension SecondViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+extension SecondViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+   /* func showChooseSourceTypeAlertController() {
+        let photoLibraryAction = UIAlertAction(title: "Choose a Photo", style: .default) { (action) in
+            self.showImagePickerController(sourceType: .photoLibrary)
+        }
+        let cameraAction = UIAlertAction(title: "Take a New Photo", style: .default) { (action) in
+            self.showImagePickerController(sourceType: .camera)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        AlertService.showAlert(style: .actionSheet, title: nil, message: nil, actions: [photoLibraryAction, cameraAction, cancelAction], completion: nil)
+    }*/
     
-    func showImagePickerControllerActionSheet(){
-        
-    }
-    
-    func showImagePickerController(sourceType: UIImagePickerController.SourceType){
+   // func showImagePickerController(sourceType: UIImagePickerController.SourceType) {
+    func showImagePickerController(){
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
-        imagePickerController.sourceType = .photoLibrary
-        present(imagePickerController, animated:true, completion:nil)
-        
+      //  imagePickerController.sourceType = sourceType
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage{
-            chosenImage.image = editedImage
-            
-        } else  if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-            chosenImage.image = originalImage
-            
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.chosenImage.image = editedImage.withRenderingMode(.alwaysOriginal)
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.chosenImage.image = originalImage.withRenderingMode(.alwaysOriginal)
         }
-        
-        
-        
         dismiss(animated: true, completion: nil)
     }
-    
-    
-    
 }
 
