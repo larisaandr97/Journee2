@@ -35,8 +35,19 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
+       
     }
     
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is SecondViewController
+        {
+            let vc = segue.destination as? SecondViewController
+            vc?.address = infoWindow.addressLabel.text! as String
+        }
+    }
     
     func loadNiB() -> MapMarkerWindow {
         let infoWindow = MapMarkerWindow.instanceFromNib() as! MapMarkerWindow
@@ -78,6 +89,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
     @objc func addVisit(sender: UIButton){
         print("Am intrat in functie!!!")
+       // performSegue(withIdentifier: "secondView", sender: self)
+        performSegue(withIdentifier: "addVisit", sender: sender);
+        
     }
 
     
