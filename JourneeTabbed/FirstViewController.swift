@@ -24,6 +24,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     fileprivate var locationMarker : GMSMarker? = GMSMarker()
     var markerAdded = GMSMarker()
     var saved = false
+    lazy var count : Int = 0
+    var lat: Double=0
+    var long: Double=0
     //var delegate: MapMarkerDelegate?
     
     override func viewDidLoad() {
@@ -31,8 +34,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         // Do any additional setup after loading the view.
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        ref=Database.database().reference()
-        
+       ref=Database.database().reference()
+      print(String(count))
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
@@ -52,6 +55,10 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         {
             let vc = segue.destination as? SecondViewController
             vc?.address = infoWindow.addressLabel.text! as String
+            vc?.currentIndex = self.count + 1
+            vc?.ref = self.ref
+            vc?.lat = self.lat
+            vc?.long = self.long
         }
     }
     
@@ -71,8 +78,10 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                         return
                     }
                     // Get coordinate values from DB
-                    let latitude = spot["latitude"]
-                    let longitude = spot["longitude"]
+                    let latitude = spot["latitude"] as! Double
+                    let longitude = spot["longitude"] as! Double
+                    /*print("Latitude: " + (latitude as! String))
+                    print("Longitude: " + (longitude as! String))*/
                     //print(latitude)
                     //print(longitude)
                     DispatchQueue.main.async(execute: {
@@ -88,6 +97,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                         marker.map = self.mapView
                         // *IMPORTANT* Assign all the spots data to the marker's userData property
                         marker.userData = spot
+                        self.count+=1
                     })
                 }
             }, withCancel: nil)
@@ -144,10 +154,19 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         {
             let name = markerData!["name"]!
             let dateVisited = markerData!["date"]!
+            let rate = markerData!["rate"]!
             infoWindow.placeNameLabel.text=name as? String
             infoWindow.dateVisitedLabel.text=dateVisited as? String
+            infoWindow.rate.text = (rate as! String) + "/5"
             infoWindow.notVisitedLabel.isHidden = true;
             infoWindow.addVisitButton.isHidden = true
+            
+            //inca nu merge
+            if(markerData?["image"] != nil){
+            let image = UIImage(contentsOfFile: markerData?["image"] as! String)
+            print(markerData?["image"] as! String)
+            infoWindow.imageView.image=image
+            }
             let geocoder = GMSGeocoder()
                 let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
                 
@@ -164,6 +183,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         {
             let geocoder = GMSGeocoder()
             let position = CLLocationCoordinate2DMake(marker.position.latitude as! CLLocationDegrees,marker.position.longitude as! CLLocationDegrees)
+            self.lat = marker.position.latitude
+            self.long = marker.position.longitude
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil
                 {

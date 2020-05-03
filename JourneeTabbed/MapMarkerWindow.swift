@@ -25,6 +25,10 @@ class MapMarkerWindow: UIView {
     
     @IBOutlet weak var addVisitButton: UIButton!
     
+    @IBOutlet weak var rate: UILabel!
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
     weak var delegate: MapMarkerDelegate?
     var spotData: NSDictionary?
     

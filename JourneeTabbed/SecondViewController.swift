@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 class SecondViewController: UIViewController {
     
@@ -24,13 +26,20 @@ class SecondViewController: UIViewController {
     
     var arrImageViews: [UIImageView] = []
     var intStars = 5
-    var intRate: Int = 0
-    var address: String="";
+    var intRate: String=""
+    var address: String=""
+    var ref: DatabaseReference!
+    //var firstViewController: FirstViewController = FirstViewController()
+    var currentIndex : Int = 0
+    var currentImagePath : String=""
+    var lat: Double=0
+    var long: Double=0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         adressLabel.text = address
         setStarStack()
+      
     }
     
    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -39,12 +48,29 @@ class SecondViewController: UIViewController {
         {
             let vc = segue.destination as? FirstViewController
             vc?.saved = true
+            vc?.count+=1
            // vc?.address = infoWindow.addressLabel.text! as String
         }
     }
     
     @IBAction func saveVisit(_ sender: Any) {
-          performSegue(withIdentifier: "savedVisit", sender: sender);
+        let name = placeNameField.text! as String
+        print("nume: " + name)
+        if(chosenImage.image != nil){
+            saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
+        
+        self.ref.child("spots/\(currentIndex)/adress").setValue(adressLabel.text)
+        self.ref.child("spots/\(currentIndex)/name").setValue(placeNameField.text)
+        self.ref.child("spots/\(currentIndex)/date").setValue(dateField.text)
+        self.ref.child("spots/\(currentIndex)/description").setValue(descriptionField.text)
+        self.ref.child("spots/\(currentIndex)/rate").setValue(intRate)
+        self.ref.child("spots/\(currentIndex)/latitude").setValue(lat)
+        self.ref.child("spots/\(currentIndex)/longitude").setValue(long)
+        if(self.chosenImage.image != nil){
+            self.ref.child("spots/\(currentIndex)/image").setValue(self.currentImagePath)
+            
+        }
+        performSegue(withIdentifier: "savedVisit", sender: sender);
         
     }
     @IBAction func chooseImage(_ sender: Any) {
@@ -94,7 +120,7 @@ class SecondViewController: UIViewController {
                 if ((location?.x)! > imageView.frame.origin.x){
                     let i = arrImageViews.firstIndex(of:imageView)
                     intRating = i! + 1;
-                    intRate=Int(intRating)
+                    intRate=String(intRating)
                     imageView.image = UIImage(named:"icon-star-filled.png")
                 }
                 else{
@@ -107,7 +133,21 @@ class SecondViewController: UIViewController {
         print(String(intRate))
     }
 
-   
+   func saveImage(imageName: String){
+      //create an instance of the FileManager
+      let fileManager = FileManager.default
+      //get the image path
+      let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
+    // self.ref.child("spots/\(spotUid)/adress").setValue(adressLabel.text)
+    print(imagePath)
+    self.currentImagePath = imagePath
+      //get the image we took with camera
+      let image = chosenImage.image!
+      //get the PNG data for this image
+    let data = image.pngData()
+      //store it in the document directory
+    fileManager.createFile(atPath: imagePath as String, contents: data, attributes: nil)
+   }
 
 }
 extension SecondViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -137,6 +177,7 @@ extension SecondViewController : UIImagePickerControllerDelegate, UINavigationCo
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.chosenImage.image = originalImage.withRenderingMode(.alwaysOriginal)
         }
+      
         dismiss(animated: true, completion: nil)
     }
 }
