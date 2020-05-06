@@ -25,6 +25,10 @@ class MyCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var dateLabel: UILabel!
     
+    var image: String = ""
+    var descript: String = ""
+    
+    
     static let identifier = "MyCollectionViewCell"
     
     override func awakeFromNib() {

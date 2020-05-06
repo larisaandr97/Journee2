@@ -29,6 +29,8 @@ class MapMarkerWindow: UIView {
     
     @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var shareButton: UIButton!
+    
     weak var delegate: MapMarkerDelegate?
     var spotData: NSDictionary?
     
@@ -39,7 +41,9 @@ class MapMarkerWindow: UIView {
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "MapMarkerWindowView", bundle: nil).instantiate(withOwner: self, options: nil).first as! UIView
     }
-
+    @IBAction func shareVisit(_ sender: Any) {
+    }
+    
 }
 
 

@@ -28,25 +28,24 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     var lat: Double=0
     var long: Double=0
     //var delegate: MapMarkerDelegate?
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-      // ref=Database.database().reference()
-       print(String(count))
+    
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
+        
       /*  if saved == true {
             showToast(message: "Saved!", font: UIFont(name: "Times New Roman", size: 19.0)!)
             print("Salvat!")
         }
         saved = false*/
-       
     }
-    
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -60,15 +59,19 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             vc?.lat = self.lat
             vc?.long = self.long
         }
+        if segue.destination is ThirdViewController
+        {
+            let vc = segue.destination as? ThirdViewController
+            vc?.ref = self.ref
+        }
+        
     }
     
     func loadNiB() -> MapMarkerWindow {
         let infoWindow = MapMarkerWindow.instanceFromNib() as! MapMarkerWindow
         return infoWindow
     }
-    
-    
-    
+        
    func loadMarkersFromDB() {
             let spots = ref.child("spots")
         spots.observe(.childAdded, with: { (snapshot) in
@@ -79,11 +82,10 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                         return
                     }
                     // Get coordinate values from DB
-                   /* if(spot["latitude"] != nil && spot["longitude"] != nil){*/
                     let latitude = spot["latitude"]
                     let longitude = spot["longitude"]
                     
-                
+
                     DispatchQueue.main.async(execute: {
                         let marker = GMSMarker()
                         // Assign custom image for each marker
@@ -154,10 +156,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.placeNameLabel.text=name as? String
             infoWindow.dateVisitedLabel.text=dateVisited as? String
             infoWindow.rate.text = (rate as! String) + "/5"
-            infoWindow.notVisitedLabel.isHidden = true;
+            infoWindow.notVisitedLabel.isHidden = true
             infoWindow.addVisitButton.isHidden = true
+           
             
-            //inca nu merge
+            // TODO: salvare poza
             if(markerData?["image"] != nil){
             let image = UIImage(contentsOfFile: markerData?["image"] as! String)
             print(markerData?["image"] as! String)
@@ -178,19 +181,21 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         else
         {
             let geocoder = GMSGeocoder()
-            let position = CLLocationCoordinate2DMake(marker.position.latitude as! CLLocationDegrees,marker.position.longitude as! CLLocationDegrees)
+            let position = CLLocationCoordinate2DMake(marker.position.latitude ,marker.position.longitude )
             self.lat = marker.position.latitude
             self.long = marker.position.longitude
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil
                 {
-                    let currentAdress = response?.firstResult()?.thoroughfare! as! String
+                    let currentAdress = response?.firstResult()?.thoroughfare!
                     self.infoWindow.addressLabel.text=currentAdress
-                    print("Adresa: " + currentAdress)
+                    print("Adresa: " + currentAdress!)
                 }
             }
             infoWindow.placeNameLabel.text="";
             infoWindow.dateVisitedLabel.text="";
+            infoWindow.rate.text="";
+            infoWindow.shareButton.isHidden = true
             infoWindow.addVisitButton.addTarget(self,action:#selector(addVisit(sender:)), for: .touchUpInside)
         }
         

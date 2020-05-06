@@ -13,15 +13,11 @@ import FirebaseDatabase
 class SecondViewController: UIViewController {
     
     @IBOutlet weak var dateField: UITextField!
-    
     @IBOutlet weak var adressLabel: UILabel!
-    
     @IBOutlet weak var placeNameField: UITextField!
-    
     @IBOutlet weak var descriptionField: UITextField!
     @IBOutlet weak var starStackView: UIStackView!
     @IBOutlet weak var addImageButton: UIButton!
-    
     @IBOutlet weak var chosenImage: UIImageView!
     
     var arrImageViews: [UIImageView] = []
@@ -34,11 +30,23 @@ class SecondViewController: UIViewController {
     var lat: Double=0
     var long: Double=0
     
+    var clickedCell: MyCollectionViewCell = MyCollectionViewCell()
+    var clicked : Bool = false
+    var indexClickedCell : Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         adressLabel.text = address
         setStarStack()
-      
+        if(clicked == true)
+        {
+            dateField.text = clickedCell.dateLabel.text
+            adressLabel.text = clickedCell.addressLabel.text
+            placeNameField.text = clickedCell.placeNameLabel.text
+            descriptionField.text = clickedCell.descript
+            editStarStack()
+        }
+        
     }
     
    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -56,7 +64,20 @@ class SecondViewController: UIViewController {
         print("nume: " + name)
         if(chosenImage.image != nil){
             saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
-        
+      /*  if (clicked == true){
+            self.ref.child("spots/\(indexClickedCell+1)/adress").setValue(adressLabel.text)
+                  self.ref.child("spots/\(indexClickedCell+1)/name").setValue(placeNameField.text)
+                  self.ref.child("spots/\(indexClickedCell+1)/date").setValue(dateField.text)
+                  self.ref.child("spots/\(indexClickedCell+1)/description").setValue(descriptionField.text)
+                  self.ref.child("spots/\(indexClickedCell+1)/rate").setValue(intRate)
+                  self.ref.child("spots/\(indexClickedCell+1)/latitude").setValue(lat)
+                  self.ref.child("spots/\(indexClickedCell+1)/longitude").setValue(long)
+                  if(self.chosenImage.image != nil){
+                      self.ref.child("spots/\(indexClickedCell+1)/image").setValue(self.currentImagePath)
+                     
+                  }
+        }
+        else{*/
         self.ref.child("spots/\(currentIndex)/adress").setValue(adressLabel.text)
         self.ref.child("spots/\(currentIndex)/name").setValue(placeNameField.text)
         self.ref.child("spots/\(currentIndex)/date").setValue(dateField.text)
@@ -68,6 +89,7 @@ class SecondViewController: UIViewController {
             self.ref.child("spots/\(currentIndex)/image").setValue(self.currentImagePath)
             
         }
+        //}
         performSegue(withIdentifier: "savedVisit", sender: sender);
         
     }
@@ -98,6 +120,20 @@ class SecondViewController: UIViewController {
         }
         starStackView.translatesAutoresizingMaskIntoConstraints = false
         
+    }
+    
+    func editStarStack(){
+        let rating = Int (clickedCell.ratingLabel.text!.prefix(1)) ?? 0
+        arrImageViews.forEach({ (imageView) in
+        //if ((location?.x)! > imageView.frame.origin.x){
+            if (self.arrImageViews.firstIndex(of:imageView)! < rating ){
+           
+            imageView.image = UIImage(named:"icon-star-filled.png")
+        }
+        else{
+                imageView.image=UIImage(named:"icon-star-empty.png")
+        }
+    })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
