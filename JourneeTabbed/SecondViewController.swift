@@ -29,7 +29,6 @@ class SecondViewController: UIViewController {
     var intRate: String=""
     var address: String=""
     var ref: DatabaseReference!
-    //var firstViewController: FirstViewController = FirstViewController()
     var currentIndex : Int = 0
     var currentImagePath : String=""
     var lat: Double=0
@@ -49,7 +48,6 @@ class SecondViewController: UIViewController {
             let vc = segue.destination as? FirstViewController
             vc?.saved = true
             vc?.count+=1
-           // vc?.address = infoWindow.addressLabel.text! as String
         }
     }
     
@@ -73,6 +71,11 @@ class SecondViewController: UIViewController {
         performSegue(withIdentifier: "savedVisit", sender: sender);
         
     }
+    
+    @IBAction func cancelVisit(_ sender: Any) {
+         performSegue(withIdentifier: "savedVisit", sender: sender);
+    }
+    
     @IBAction func chooseImage(_ sender: Any) {
         showImagePickerController()
         //showChooseSourceTypeAlertController()
@@ -138,7 +141,7 @@ class SecondViewController: UIViewController {
       let fileManager = FileManager.default
       //get the image path
       let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
-    // self.ref.child("spots/\(spotUid)/adress").setValue(adressLabel.text)
+    
     print(imagePath)
     self.currentImagePath = imagePath
       //get the image we took with camera

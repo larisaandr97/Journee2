@@ -45,11 +45,11 @@
             <objects>
                 <viewController storyboardIdentifier="secondView" id="8rJ-Kc-sve" customClass="SecondViewController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rly-Ao-z7w">
-                                <rect key="frame" x="297" y="756" width="55" height="39"/>
+                                <rect key="frame" x="297" y="712" width="55" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="Tmx-lK-NNX"/>
                                     <constraint firstAttribute="width" constant="55" id="ZCB-0H-HO6"/>
@@ -62,16 +62,19 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gp1-La-NXO">
-                                <rect key="frame" x="62" y="756" width="55" height="39"/>
+                                <rect key="frame" x="62" y="712" width="55" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="55" id="9NC-UY-mYD"/>
                                 </constraints>
                                 <state key="normal" title="Cancel">
                                     <color key="titleColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="cancelVisit:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="S35-HI-eKD"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="PLu-nc-BOV" userLabel="Vertical Stack View">
-                                <rect key="frame" x="20.5" y="165" width="374" height="555"/>
+                                <rect key="frame" x="20.5" y="121" width="374" height="555"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pfr-PV-PlD" userLabel="Row Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="30"/>
@@ -206,7 +209,7 @@
                                 </constraints>
                             </stackView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Add new visit" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="zEq-FU-wV5">
-                                <rect key="frame" x="94" y="74" width="227" height="51.5"/>
+                                <rect key="frame" x="94" y="30" width="227" height="51.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="32"/>
                                 <nil key="highlightedColor"/>
@@ -252,21 +255,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NUk-Mu-UHg">
-                                <rect key="frame" x="0.0" y="80" width="414" height="733"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BIf-Rd-SJE">
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IWB-E6-CZI">
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Wod-dT-0j0">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cWD-Ft-ac0">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="QxH-0A-eDx">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ULv-42-19A">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mpu-I8-x9k">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
@@ -275,9 +277,19 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="BIf-Rd-SJE" firstAttribute="top" secondItem="jhz-G3-VVR" secondAttribute="top" id="Bdk-3n-TKU"/>
+                            <constraint firstItem="BIf-Rd-SJE" firstAttribute="leading" secondItem="jhz-G3-VVR" secondAttribute="leading" id="Fd1-Fk-UMH"/>
+                            <constraint firstItem="jhz-G3-VVR" firstAttribute="trailing" secondItem="BIf-Rd-SJE" secondAttribute="trailing" id="SHp-zw-jhW"/>
+                            <constraint firstItem="jhz-G3-VVR" firstAttribute="bottom" secondItem="BIf-Rd-SJE" secondAttribute="bottom" id="rBt-hH-7uh"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="jhz-G3-VVR"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="journal-50" id="UbD-3h-rUO"/>
+                    <connections>
+                        <outlet property="collectionView" destination="BIf-Rd-SJE" id="t3H-YO-3FP"/>
+                        <segue destination="8rJ-Kc-sve" kind="showDetail" identifier="editVisit" id="DoT-WY-SIJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgz-Gj-GYl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -304,7 +316,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lzU-1b-eKA"/>
+        <segue reference="DoT-WY-SIJ"/>
         <segue reference="uPm-Sd-sPZ"/>
     </inferredMetricsTieBreakers>
     <resources>

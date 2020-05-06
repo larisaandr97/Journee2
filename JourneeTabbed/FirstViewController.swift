@@ -19,7 +19,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
     @IBOutlet weak var mapView: GMSMapView!
     private let locationManager=CLLocationManager();
-    var ref: DatabaseReference!
+    lazy var ref: DatabaseReference! = Database.database().reference()
     private var infoWindow = MapMarkerWindow()
     fileprivate var locationMarker : GMSMarker? = GMSMarker()
     var markerAdded = GMSMarker()
@@ -34,8 +34,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         // Do any additional setup after loading the view.
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-       ref=Database.database().reference()
-      print(String(count))
+      // ref=Database.database().reference()
+       print(String(count))
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
@@ -71,29 +71,27 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
    func loadMarkersFromDB() {
             let spots = ref.child("spots")
-            spots.observe(.childAdded, with: { (snapshot) in
-                if snapshot.value as? [String : AnyObject] != nil {
+        spots.observe(.childAdded, with: { (snapshot) in
+    //spots.observeSingleEvent(of: .value, with: { (snapshot) in
+        if snapshot.value as? [String : AnyObject] != nil {
                     self.mapView.clear()
                     guard let spot = snapshot.value as? [String : AnyObject] else {
                         return
                     }
                     // Get coordinate values from DB
-                    let latitude = spot["latitude"] as! Double
-                    let longitude = spot["longitude"] as! Double
-                    /*print("Latitude: " + (latitude as! String))
-                    print("Longitude: " + (longitude as! String))*/
-                    //print(latitude)
-                    //print(longitude)
+                   /* if(spot["latitude"] != nil && spot["longitude"] != nil){*/
+                    let latitude = spot["latitude"]
+                    let longitude = spot["longitude"]
+                    
+                
                     DispatchQueue.main.async(execute: {
                         let marker = GMSMarker()
                         // Assign custom image for each marker
-                       /* let markerImage = self.resizeImage(image: UIImage.init(named: "icons-marker-30")!, newWidth: 30).withRenderingMode(.alwaysTemplate)*/
                         let markerImage = UIImage(named:"icons-marker-48");//!.withRenderingMode(.alwaysTemplate)
                         let markerView = UIImageView(image: markerImage)
-                        // Customize color of marker here:
-                        //markerView.tintColor = UIColor.green
+                    
                         marker.iconView = markerView
-                        marker.position = CLLocationCoordinate2D(latitude: latitude as! CLLocationDegrees, longitude: longitude as! CLLocationDegrees)
+                        marker.position = CLLocationCoordinate2D(latitude: latitude as! CLLocationDegrees , longitude: longitude as! CLLocationDegrees )
                         marker.map = self.mapView
                         // *IMPORTANT* Assign all the spots data to the marker's userData property
                         marker.userData = spot
@@ -117,7 +115,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         var markerData : NSDictionary?
         if marker.userData == nil {
             print("NU AM DATE")
-           // return false
             hasData = false
         }
         if hasData==true{
@@ -126,7 +123,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             }
         }
        
-        //print("Am ajuns aici!")
         locationMarker = marker
         infoWindow.removeFromSuperview()
         infoWindow = loadNiB()
@@ -134,6 +130,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             print("locationMarker is nil")
             return false
         }
+        
         // Pass the spot data to the info window, and set its delegate to self
         if hasData==true{
             infoWindow.spotData = markerData
@@ -149,7 +146,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.layer.borderColor = UIColor(named: "19E698")?.cgColor
         infoWindow.addVisitButton.layer.cornerRadius = infoWindow.addVisitButton.frame.height / 2
             
-       // let address = markerData!["address"]!
         if hasData==true
         {
             let name = markerData!["name"]!
@@ -173,9 +169,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil {
-               var currentAdress = response?.firstResult()?.thoroughfare! as! String
+                    let currentAdress = response?.firstResult()?.thoroughfare!
                 self.infoWindow.addressLabel.text=currentAdress
-                print("Adresa: " + currentAdress)
+               // print("Adresa: " + currentAdress)
                 }
             }
         }
@@ -188,7 +184,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil
                 {
-                   var currentAdress = response?.firstResult()?.thoroughfare! as! String
+                    let currentAdress = response?.firstResult()?.thoroughfare! as! String
                     self.infoWindow.addressLabel.text=currentAdress
                     print("Adresa: " + currentAdress)
                 }
@@ -197,7 +193,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.dateVisitedLabel.text="";
             infoWindow.addVisitButton.addTarget(self,action:#selector(addVisit(sender:)), for: .touchUpInside)
         }
-        //infoWindow.addressLabel.text=currentAdress as! String
+        
         // Offset the info window to be directly above the tapped marker
         infoWindow.center = mapView.projection.point(for: location)
         infoWindow.center.y = infoWindow.center.y - 82
@@ -230,7 +226,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
          let geocoder = GMSGeocoder()
         geocoder.reverseGeocodeCoordinate(markerAdded.position) { response, error in
             if (response?.firstResult()) != nil {
-                self.markerAdded.title=response?.firstResult()?.thoroughfare! as! String
+                self.markerAdded.title=(response?.firstResult()?.thoroughfare! as! String)
               
                   }
               }
