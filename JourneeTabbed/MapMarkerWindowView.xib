@@ -65,7 +65,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="Share"/>
                     <connections>
-                        <action selector="shareVisit:" destination="iN0-l3-epB" eventType="touchUpInside" id="qMP-9w-Ir9"/>
+                        <action selector="shareVisit:" destination="iN0-l3-epB" eventType="touchUpInside" id="UjA-H2-qK7"/>
                     </connections>
                 </button>
             </subviews>

@@ -11,6 +11,7 @@ import UIKit
 
 protocol MapMarkerDelegate: class {
     func didTapInfoButton(data: NSDictionary)
+    func shareVisit(data: NSDictionary)
 }
 
 class MapMarkerWindow: UIView {
@@ -42,7 +43,9 @@ class MapMarkerWindow: UIView {
         return UINib(nibName: "MapMarkerWindowView", bundle: nil).instantiate(withOwner: self, options: nil).first as! UIView
     }
     @IBAction func shareVisit(_ sender: Any) {
+          delegate?.shareVisit(data: spotData!)
     }
+    
     
 }
 

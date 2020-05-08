@@ -46,7 +46,6 @@ class SecondViewController: UIViewController {
             descriptionField.text = clickedCell.descript
             editStarStack()
         }
-        
     }
     
    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -78,18 +77,16 @@ class SecondViewController: UIViewController {
                   }
         }
         else{*/
-        self.ref.child("spots/\(currentIndex)/adress").setValue(adressLabel.text)
-        self.ref.child("spots/\(currentIndex)/name").setValue(placeNameField.text)
-        self.ref.child("spots/\(currentIndex)/date").setValue(dateField.text)
-        self.ref.child("spots/\(currentIndex)/description").setValue(descriptionField.text)
-        self.ref.child("spots/\(currentIndex)/rate").setValue(intRate)
-        self.ref.child("spots/\(currentIndex)/latitude").setValue(lat)
-        self.ref.child("spots/\(currentIndex)/longitude").setValue(long)
-        if(self.chosenImage.image != nil){
-            self.ref.child("spots/\(currentIndex)/image").setValue(self.currentImagePath)
-            
-        }
-        //}
+        var newChild = [String:AnyObject] ()
+        newChild["adress"] = adressLabel.text as AnyObject?
+        newChild["name"] = placeNameField.text as AnyObject?
+        newChild["date"] = dateField.text as AnyObject?
+        newChild["description"] = descriptionField.text as AnyObject?
+        newChild["rate"] = intRate as AnyObject?
+        newChild["latitude"] = lat as AnyObject?
+        newChild["longitude"] = long as AnyObject?
+        
+        self.ref.child("spots/\(currentIndex)").setValue(newChild)
         performSegue(withIdentifier: "savedVisit", sender: sender);
         
     }

@@ -15,7 +15,6 @@ import FirebaseDatabase
 
 
 class FirstViewController: UIViewController ,GMSMapViewDelegate{
-
     
     @IBOutlet weak var mapView: GMSMapView!
     private let locationManager=CLLocationManager();
@@ -27,8 +26,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     lazy var count : Int = 0
     var lat: Double=0
     var long: Double=0
-    //var delegate: MapMarkerDelegate?
-   
+    var hasImage: Bool=false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,8 +82,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                     // Get coordinate values from DB
                     let latitude = spot["latitude"]
                     let longitude = spot["longitude"]
-                    
-
+                
                     DispatchQueue.main.async(execute: {
                         let marker = GMSMarker()
                         // Assign custom image for each marker
@@ -109,14 +106,61 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         performSegue(withIdentifier: "addVisit", sender: sender);
         
     }
-
+    
+    @objc func shareVisit(sender: UIButton){
+        print("Share!")
+        let shareText = infoWindow.addressLabel.text
+      /*  let lati = (infoWindow.spotData!["latitude"] as? String)!
+        let longi = (infoWindow.spotData!["longitude"] as? String)!
+        let firsthalf = "comgooglemaps://?center=" + lati + "," + longi
+        let generalLink = firsthalf + "&zoom=14&views=traffic"
+        guard let url = URL(string: generalLink)
+        else { return }*/
+        /*    let image = UIImage(named: ".png")
+            else { return }*/
+       
+        if(hasImage == true){
+             let  imageToShare = infoWindow.imageView.image
+            let shareContent: [Any] = [shareText!, imageToShare!]
+            let activityController = UIActivityViewController(activityItems: shareContent,
+                                                          applicationActivities: nil)
+            self.present(activityController, animated: true, completion: nil)
+        }
+            
+        else{
+            let shareContent: [Any] = [shareText!]
+            let activityController = UIActivityViewController(activityItems: shareContent,
+                                                                     applicationActivities: nil)
+            if (UIDevice.current.userInterfaceIdiom == .phone) {
+                    self.present(activityController, animated: true, completion: nil)
+                       }        }
+    }
+    
+    func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    func getImage(imageName : String)-> UIImage{
+            let fileManager = FileManager.default
+            let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent(imageName)
+            if fileManager.fileExists(atPath: imagePath){
+                hasImage = true
+                return UIImage(contentsOfFile: imagePath)!
+            }else{
+                hasImage = false
+                print("No Image available")
+                return UIImage.init(named: "placeholder.jpg")! // Return placeholder image here
+            }
+        }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
        
         var hasData = true
         var markerData : NSDictionary?
         if marker.userData == nil {
-            print("NU AM DATE")
+           // print("NU AM DATE")
             hasData = false
         }
         if hasData==true{
@@ -159,26 +203,26 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.notVisitedLabel.isHidden = true
             infoWindow.addVisitButton.isHidden = true
            
+            // Afisare imagine
+            //print("Directory: " + getDirectoryPath())
+            let imageName = infoWindow.placeNameLabel.text?.replacingOccurrences(of: " ", with: "")
+            infoWindow.imageView.image=getImage(imageName: imageName!)
             
-            // TODO: salvare poza
-            if(markerData?["image"] != nil){
-            let image = UIImage(contentsOfFile: markerData?["image"] as! String)
-            print(markerData?["image"] as! String)
-            infoWindow.imageView.image=image
-            }
             let geocoder = GMSGeocoder()
-                let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
+            let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
                 
-            
+            // cautare adresa dupa coordonate
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil {
                     let currentAdress = response?.firstResult()?.thoroughfare!
                 self.infoWindow.addressLabel.text=currentAdress
-               // print("Adresa: " + currentAdress)
                 }
             }
+            
+            infoWindow.shareButton.addTarget(self,action:#selector(shareVisit(sender:)), for: .touchUpInside)
         }
-        else
+            
+        else //Nu exista in baza de date inca
         {
             let geocoder = GMSGeocoder()
             let position = CLLocationCoordinate2DMake(marker.position.latitude ,marker.position.longitude )
@@ -223,21 +267,19 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.removeFromSuperview()
     }
     
-       func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-            // Custom logic here
-        print("LONG PRESS")
-            
-            markerAdded.position = coordinate
-         let geocoder = GMSGeocoder()
+    func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+         
+        markerAdded.position = coordinate
+
+        let geocoder = GMSGeocoder()
         geocoder.reverseGeocodeCoordinate(markerAdded.position) { response, error in
             if (response?.firstResult()) != nil {
                 self.markerAdded.title=(response?.firstResult()?.thoroughfare! as! String)
               
                   }
               }
-           // marker.title = "I added this with a long tap"
-            markerAdded.snippet = ""
-            markerAdded.map = mapView
+        markerAdded.snippet = ""
+        markerAdded.map = mapView
        }
   
 }
