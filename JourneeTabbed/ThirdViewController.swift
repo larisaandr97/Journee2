@@ -51,6 +51,7 @@ class ThirdViewController: UIViewController{
                 vc?.clickedCell = self.clickedCell
                 vc?.clicked = true
                 vc?.indexClickedCell = self.clickedCellIndex
+                vc?.ref=self.ref
            }
         
        }

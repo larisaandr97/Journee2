@@ -63,20 +63,7 @@ class SecondViewController: UIViewController {
         print("nume: " + name)
         if(chosenImage.image != nil){
             saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
-      /*  if (clicked == true){
-            self.ref.child("spots/\(indexClickedCell+1)/adress").setValue(adressLabel.text)
-                  self.ref.child("spots/\(indexClickedCell+1)/name").setValue(placeNameField.text)
-                  self.ref.child("spots/\(indexClickedCell+1)/date").setValue(dateField.text)
-                  self.ref.child("spots/\(indexClickedCell+1)/description").setValue(descriptionField.text)
-                  self.ref.child("spots/\(indexClickedCell+1)/rate").setValue(intRate)
-                  self.ref.child("spots/\(indexClickedCell+1)/latitude").setValue(lat)
-                  self.ref.child("spots/\(indexClickedCell+1)/longitude").setValue(long)
-                  if(self.chosenImage.image != nil){
-                      self.ref.child("spots/\(indexClickedCell+1)/image").setValue(self.currentImagePath)
-                     
-                  }
-        }
-        else{*/
+       
         var newChild = [String:AnyObject] ()
         newChild["adress"] = adressLabel.text as AnyObject?
         newChild["name"] = placeNameField.text as AnyObject?
@@ -86,7 +73,12 @@ class SecondViewController: UIViewController {
         newChild["latitude"] = lat as AnyObject?
         newChild["longitude"] = long as AnyObject?
         
-        self.ref.child("spots/\(currentIndex)").setValue(newChild)
+     if (clicked == false){
+        self.ref.child("spots/\(currentIndex)").setValue(newChild)}
+    else{
+       self.ref.child("spots/\(indexClickedCell+1)").setValue(newChild)
+    }
+    
         performSegue(withIdentifier: "savedVisit", sender: sender);
         
     }
