@@ -30,31 +30,15 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let spots = ref.child("spots")
-        spots.observe(.childChanged, with: { (snapshot: DataSnapshot!) in
-                      print("Child changed")
-          
-                             })
-                 
+            
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
     
         loadMarkersFromDB()
         self.infoWindow = loadNiB()
         mapView.delegate=self
-        
-      /*  if saved == true {
-            showToast(message: "Saved!", font: UIFont(name: "Times New Roman", size: 19.0)!)
-            print("Salvat!")
-        }
-        saved = false*/
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-            print("First view appeared")
-            super.viewWillAppear(animated) // No need for semicolon
-    }
-
+   
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         if segue.destination is SecondViewController
@@ -118,14 +102,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     @objc func shareVisit(sender: UIButton){
         print("Share!")
         let shareText = infoWindow.addressLabel.text
-      /*  let lati = (infoWindow.spotData!["latitude"] as? String)!
-        let longi = (infoWindow.spotData!["longitude"] as? String)!
-        let firsthalf = "comgooglemaps://?center=" + lati + "," + longi
-        let generalLink = firsthalf + "&zoom=14&views=traffic"
-        guard let url = URL(string: generalLink)
-        else { return }*/
-        /*    let image = UIImage(named: ".png")
-            else { return }*/
        
         if(hasImage == true){
              let  imageToShare = infoWindow.imageView.image
@@ -168,7 +144,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         var hasData = true
         var markerData : NSDictionary?
         if marker.userData == nil {
-           // print("NU AM DATE")
             hasData = false
         }
         if hasData==true{
@@ -190,9 +165,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.spotData = markerData
             
         }
-      //  infoWindow.setDelegate(self, mapDelegate: self)
-       // infoWindow.delegate = self as? MapMarkerDelegate
-        
+
         // Configure UI properties of info window
         infoWindow.alpha = 0.9
         infoWindow.layer.cornerRadius = 12
@@ -212,7 +185,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.addVisitButton.isHidden = true
            
             // Afisare imagine
-            //print("Directory: " + getDirectoryPath())
             let imageName = infoWindow.placeNameLabel.text?.replacingOccurrences(of: " ", with: "")
             infoWindow.imageView.image=getImage(imageName: imageName!)
             
@@ -241,7 +213,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                 {
                     let currentAdress = response?.firstResult()?.thoroughfare!
                     self.infoWindow.addressLabel.text=currentAdress
-                    print("Adresa: " + currentAdress!)
                 }
             }
             infoWindow.placeNameLabel.text="";
@@ -255,7 +226,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.center = mapView.projection.point(for: location)
         infoWindow.center.y = infoWindow.center.y - 82
         self.view.addSubview(infoWindow)
-        print("Info window added")
         return false
     }
     
@@ -283,7 +253,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         geocoder.reverseGeocodeCoordinate(markerAdded.position) { response, error in
             if (response?.firstResult()) != nil {
                 self.markerAdded.title=(response?.firstResult()?.thoroughfare! as! String)
-              
                   }
               }
         markerAdded.snippet = ""
@@ -295,32 +264,23 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
 
 
 // MARK: - CLLocationManagerDelegate
-//1
+
 extension FirstViewController: CLLocationManagerDelegate {
-  // 2
+
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-    // 3
     guard status == .authorizedWhenInUse else {
       return
     }
-    // 4
     locationManager.startUpdatingLocation()
-      
-    //5
     mapView.isMyLocationEnabled = true
     mapView.settings.myLocationButton = true
   }
   
-  // 6
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let location = locations.first else {
       return
     }
-      
-    // 7
     mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
-      
-    // 8
     locationManager.stopUpdatingLocation()
   }
 }
@@ -340,7 +300,6 @@ func showToast(message : String, font: UIFont) {
     toastLabel.layer.cornerRadius = 10;
     toastLabel.clipsToBounds  =  true
     self.view.addSubview(toastLabel)
-    //UIApplication.shared.keyWindow?.addSubview(toastLabel)
     UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
          toastLabel.alpha = 0.0
     }, completion: {(isCompleted) in

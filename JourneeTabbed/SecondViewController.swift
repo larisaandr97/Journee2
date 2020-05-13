@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import UserNotifications
 
 class SecondViewController: UIViewController {
     
@@ -50,12 +51,8 @@ class SecondViewController: UIViewController {
             let imageName = placeNameField.text?.replacingOccurrences(of: " ", with: "")
             self.chosenImage.image = getImage(imageName: imageName!)
         }
+ 
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated) // No need for semicolon
-        reloadInputViews()
-}
     
     func getDirectoryPath() -> String {
           let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -67,10 +64,8 @@ class SecondViewController: UIViewController {
                let fileManager = FileManager.default
                let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent(imageName)
                if fileManager.fileExists(atPath: imagePath){
-                   //hasImage = true
                    return UIImage(contentsOfFile: imagePath)!
                }else{
-                   //hasImage = false
                    print("No Image available")
                    return UIImage.init(named: "placeholder.jpg")! // Return placeholder image here
                }
@@ -86,6 +81,30 @@ class SecondViewController: UIViewController {
         }
     }
     
+    func addNotification(){
+           let center = UNUserNotificationCenter.current()
+                  center.requestAuthorization(options: [.alert, .sound, .badge]) {
+                      (didAllow, error) in
+                      if !didAllow {
+                          print("User has declined notifications")
+                      }
+                  }
+           
+                  let content = UNMutableNotificationContent()
+                  content.title = "New visit added!"
+                  content.body = "Open to see more details"
+                  
+                  let date = Date().addingTimeInterval(10)
+                  let dateComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+                  let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
+                  let idString = UUID().uuidString
+                  let request = UNNotificationRequest(identifier: idString, content: content, trigger: trigger)
+                  
+                  center.add(request) { (error) in
+                      // check errors
+                  }
+       }
+   
     @IBAction func saveVisit(_ sender: Any) {
         let name = placeNameField.text! as String
         print("nume: " + name)
@@ -109,7 +128,7 @@ class SecondViewController: UIViewController {
             self.ref.child("spots/\(indexClickedCell+1)").updateChildValues(newChild)
             clicked = false
         }
-    
+        addNotification()
        // performSegue(withIdentifier: "savedVisit", sender: sender);
         self.dismiss(animated: true, completion: nil)
     }
@@ -117,7 +136,6 @@ class SecondViewController: UIViewController {
     @IBAction func cancelVisit(_ sender: Any) {
         // performSegue(withIdentifier: "savedVisit", sender: sender);
           self.dismiss(animated: true, completion: nil)
-        
     }
     
     @IBAction func chooseImage(_ sender: Any) {
@@ -141,17 +159,14 @@ class SecondViewController: UIViewController {
             arrImageViews.append(imageView)
         }
         starStackView.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
     func editStarStack(){
         let rating = Int (clickedCell.ratingLabel.text!.prefix(1)) ?? 0
         
         arrImageViews.forEach({ (imageView) in
-        //if ((location?.x)! > imageView.frame.origin.x){
             if (self.arrImageViews.firstIndex(of:imageView)! < rating ){
-           
-            imageView.image = UIImage(named:"icon-star-filled.png")
+                 imageView.image = UIImage(named:"icon-star-filled.png")
         }
         else{
                 imageView.image=UIImage(named:"icon-star-empty.png")
@@ -169,7 +184,6 @@ class SecondViewController: UIViewController {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
     {
-        
         handleTouchAtLocation(withTouches: touches)
     }
     
@@ -192,7 +206,6 @@ class SecondViewController: UIViewController {
                 }
             })
         }
-        print(String(intRate))
     }
 
    func saveImage(imageName: String){
@@ -200,8 +213,6 @@ class SecondViewController: UIViewController {
       let fileManager = FileManager.default
       //get the image path
       let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
-    
-    print(imagePath)
     self.currentImagePath = imagePath
       //get the image we took with camera
       let image = chosenImage.image!

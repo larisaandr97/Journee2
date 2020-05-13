@@ -11,15 +11,18 @@ import Firebase
 import FirebaseDatabase
 import GoogleMaps
 import GooglePlaces
+import UserNotifications
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let notificationCenter = UNUserNotificationCenter.current()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         GMSServices.provideAPIKey("AIzaSyASeO3NXivThTkjGomh0Tr9IbG8JjvnML0")
         GMSPlacesClient.provideAPIKey("AIzaSyASeO3NXivThTkjGomh0Tr9IbG8JjvnML0")
-    
         return true
     }
     

@@ -37,13 +37,11 @@ class MyCollectionViewCell: UICollectionViewCell {
     }
     @IBAction func editVisit(_ sender: Any) {
         delegate?.collectionViewCell(self)
-       // print(s)
     }
     
     static func nib()-> UINib{
         return UINib(nibName: "MyCollectionViewCell", bundle: nil)
     }
-    
     
 }
 

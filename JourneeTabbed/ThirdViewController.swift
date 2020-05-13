@@ -9,7 +9,6 @@
 import UIKit
 import FirebaseDatabase
 
-
 class ThirdViewController: UIViewController{
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -42,17 +41,15 @@ class ThirdViewController: UIViewController{
                        })
            
             getData()
-            
             collectionView.register(MyCollectionViewCell.nib(), forCellWithReuseIdentifier: MyCollectionViewCell.identifier)
             collectionView.delegate = self
             collectionView.dataSource = self
-            
-         
+
         }
     
     override func viewWillAppear(_ animated: Bool) {
         print("Third view appeared")
-        super.viewWillAppear(animated) // No need for semicolon
+        super.viewWillAppear(animated)
         self.collectionView.reloadData()
 }
     
@@ -73,7 +70,6 @@ class ThirdViewController: UIViewController{
          let red:CGFloat = CGFloat(drand48())
          let green:CGFloat = CGFloat(drand48())
          let blue:CGFloat = CGFloat(drand48())
-
          return UIColor(red:red, green: green, blue: blue, alpha: 1.0)
     }
     
@@ -86,7 +82,6 @@ class ThirdViewController: UIViewController{
             }
         }, withCancel: nil)
     }
-        
     }
 
 // MARK:- UICollectionViewDelegate
