@@ -22,6 +22,8 @@ class ThirdViewController: UIViewController{
     
         override func viewDidLoad() {
             super.viewDidLoad()
+            print("Am intrat")
+            collectionView.reloadData()
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: 120,height: 120)
@@ -33,6 +35,11 @@ class ThirdViewController: UIViewController{
                 self.count = Int(snapshot.childrenCount)
                 self.collectionView.reloadData()
             })
+            
+            spots.observe(.childChanged, with: { (snapshot: DataSnapshot!) in
+                print("Child changed in third view controller")
+                self.collectionView.reloadData()
+                       })
            
             getData()
             
@@ -43,6 +50,12 @@ class ThirdViewController: UIViewController{
          
         }
     
+    override func viewWillAppear(_ animated: Bool) {
+        print("Third view appeared")
+        super.viewWillAppear(animated) // No need for semicolon
+        self.collectionView.reloadData()
+}
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
        {
            if segue.destination is SecondViewController
@@ -51,8 +64,7 @@ class ThirdViewController: UIViewController{
                 vc?.clickedCell = self.clickedCell
                 vc?.clicked = true
                 vc?.indexClickedCell = self.clickedCellIndex
-                vc?.ref=self.ref
-           }
+                vc?.ref=self.ref           }
         
        }
     
@@ -71,24 +83,10 @@ class ThirdViewController: UIViewController{
         spots.observe(.childAdded, with: { (snapshot) in
                if snapshot.value as? [String : AnyObject] != nil {
                 self.spotsArray.append(snapshot)
-                   /* let name = spot["name"] as! String
-                    let address = spot["adress"] as! String
-                    print("Name/address" + name  + " / " + address )*/
             }
         }, withCancel: nil)
     }
         
-   /* func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.backgroundColor = UIColor.systemPurple
-    }
-
-    // change background color back when user releases touch
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.backgroundColor = UIColor.lightGray
-    }*/
-
     }
 
 // MARK:- UICollectionViewDelegate

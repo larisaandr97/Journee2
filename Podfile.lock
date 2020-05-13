@@ -81,12 +81,14 @@ PODS:
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
   - PromisesObjC (1.2.8)
+  - TinyConstraints (4.0.1)
 
 DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Database
   - GoogleMaps
   - GooglePlaces
+  - TinyConstraints
 
 SPEC REPOS:
   trunk:
@@ -107,6 +109,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - TinyConstraints
 
 SPEC CHECKSUMS:
   Firebase: 32f9520684e87c7af3f0704f7f88042626d6b536
@@ -126,7 +129,8 @@ SPEC CHECKSUMS:
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  TinyConstraints: 8dd91295e56797648c7bc335dd20e1d91ec4c192
 
-PODFILE CHECKSUM: fe91500f55383fe16aac3665e8cbc7d1e9f473da
+PODFILE CHECKSUM: efb15059a7d4ed0e358e32824458a67aeac2789d
 
 COCOAPODS: 1.9.1

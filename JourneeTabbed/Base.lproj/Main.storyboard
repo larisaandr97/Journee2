@@ -11,10 +11,9 @@
         <!--First View Controller-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
                 <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lZy-G2-yR9" customClass="GMSMapView">
@@ -35,18 +34,21 @@
                     <navigationItem key="navigationItem" id="sFp-5S-ai2"/>
                     <connections>
                         <outlet property="mapView" destination="lZy-G2-yR9" id="t3q-rg-gq5"/>
-                        <segue destination="8rJ-Kc-sve" kind="showDetail" identifier="addVisit" id="Xvi-Kq-M2M"/>
+                        <segue destination="8rJ-Kc-sve" kind="popoverPresentation" identifier="addVisit" popoverAnchorView="tsR-hK-woN" id="Xvi-Kq-M2M">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.27536231884062" y="-320.08928571428572"/>
+            <point key="canvasLocation" x="2083" y="-248"/>
         </scene>
         <!--Second View Controller-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
                 <viewController storyboardIdentifier="secondView" id="8rJ-Kc-sve" customClass="SecondViewController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rly-Ao-z7w">
@@ -208,6 +210,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="374" id="t81-pP-dTO"/>
                                 </constraints>
+                                <variation key="heightClass=compact" axis="horizontal"/>
                             </stackView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Add new visit" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="zEq-FU-wV5">
                                 <rect key="frame" x="94" y="30" width="227" height="51.5"/>
@@ -241,12 +244,13 @@
                         <outlet property="descriptionField" destination="gRt-8S-Qmd" id="jzx-Uj-gyz"/>
                         <outlet property="placeNameField" destination="7H2-U6-5bb" id="Bag-X6-HCh"/>
                         <outlet property="starStackView" destination="iHu-Sz-i9p" id="MQg-ir-LEA"/>
-                        <segue destination="9pv-A4-QxB" kind="push" identifier="savedVisit" id="uPm-Sd-sPZ"/>
+                        <outlet property="titleLabel" destination="zEq-FU-wV5" id="w4K-Op-svs"/>
+                        <segue destination="9pv-A4-QxB" kind="showDetail" identifier="savedVisit" id="uPm-Sd-sPZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.27536231884062" y="359.59821428571428"/>
+            <point key="canvasLocation" x="1399" y="684"/>
         </scene>
         <!--Third View Controller-->
         <scene sceneID="mS9-6c-RNT">
@@ -294,7 +298,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgz-Gj-GYl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1621.7391304347827" y="101.78571428571428"/>
+            <point key="canvasLocation" x="39" y="825"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -312,12 +316,12 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-220" y="40"/>
+            <point key="canvasLocation" x="301" y="-73"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Xvi-Kq-M2M"/>
-        <segue reference="u7Y-xg-7CH"/>
+        <segue reference="uPm-Sd-sPZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="add-48" width="48" height="48"/>

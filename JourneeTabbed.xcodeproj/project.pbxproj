@@ -21,7 +21,13 @@
 		B87442D8245494AA00B4DB43 /* icons-marker-30.png in Resources */ = {isa = PBXBuildFile; fileRef = B87442D7245494AA00B4DB43 /* icons-marker-30.png */; };
 		B87442DA2454B65B00B4DB43 /* icons-marker-64.png in Resources */ = {isa = PBXBuildFile; fileRef = B87442D92454B65B00B4DB43 /* icons-marker-64.png */; };
 		B87442DC2454B6DA00B4DB43 /* icons-marker-48.png in Resources */ = {isa = PBXBuildFile; fileRef = B87442DB2454B6DA00B4DB43 /* icons-marker-48.png */; };
+		B8900F45246202100045A992 /* MyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8900F43246202100045A992 /* MyCollectionViewCell.swift */; };
+		B8900F46246202100045A992 /* MyCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8900F44246202100045A992 /* MyCollectionViewCell.xib */; };
+		B895FE1E2459C2BA00F3A53C /* icon-star-empty.png in Resources */ = {isa = PBXBuildFile; fileRef = B895FE1C2459C2BA00F3A53C /* icon-star-empty.png */; };
+		B895FE1F2459C2BA00F3A53C /* icon-star-filled.png in Resources */ = {isa = PBXBuildFile; fileRef = B895FE1D2459C2BA00F3A53C /* icon-star-filled.png */; };
+		B895FE23245A052F00F3A53C /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B895FE22245A052F00F3A53C /* AlertService.swift */; };
 		B89CCD102450708B00D44752 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89CCD0F2450708B00D44752 /* ThirdViewController.swift */; };
+		B8F3F4192465A620004B140A /* placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B8F3F4182465A61F004B140A /* placeholder.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +49,13 @@
 		B87442D7245494AA00B4DB43 /* icons-marker-30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons-marker-30.png"; path = "../../../Downloads/icons-marker-30.png"; sourceTree = "<group>"; };
 		B87442D92454B65B00B4DB43 /* icons-marker-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons-marker-64.png"; path = "../../../Downloads/icons-marker-64.png"; sourceTree = "<group>"; };
 		B87442DB2454B6DA00B4DB43 /* icons-marker-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons-marker-48.png"; path = "../../../Downloads/icons-marker-48.png"; sourceTree = "<group>"; };
+		B8900F43246202100045A992 /* MyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewCell.swift; sourceTree = "<group>"; };
+		B8900F44246202100045A992 /* MyCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyCollectionViewCell.xib; sourceTree = "<group>"; };
+		B895FE1C2459C2BA00F3A53C /* icon-star-empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-star-empty.png"; path = "../../../Downloads/icon-star-empty.png"; sourceTree = "<group>"; };
+		B895FE1D2459C2BA00F3A53C /* icon-star-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-star-filled.png"; path = "../../../Downloads/icon-star-filled.png"; sourceTree = "<group>"; };
+		B895FE22245A052F00F3A53C /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
 		B89CCD0F2450708B00D44752 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
+		B8F3F4182465A61F004B140A /* placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = placeholder.jpg; path = ../../../Downloads/placeholder.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +108,9 @@
 		B82EAD35244F86E600AC77C3 /* JourneeTabbed */ = {
 			isa = PBXGroup;
 			children = (
+				B8F3F4182465A61F004B140A /* placeholder.jpg */,
+				B895FE1C2459C2BA00F3A53C /* icon-star-empty.png */,
+				B895FE1D2459C2BA00F3A53C /* icon-star-filled.png */,
 				B87442D7245494AA00B4DB43 /* icons-marker-30.png */,
 				B87442D92454B65B00B4DB43 /* icons-marker-64.png */,
 				B87442DB2454B6DA00B4DB43 /* icons-marker-48.png */,
@@ -111,6 +126,9 @@
 				B89CCD0F2450708B00D44752 /* ThirdViewController.swift */,
 				B87442D32454716300B4DB43 /* MapMarkerWindowView.xib */,
 				B87442D5245472A300B4DB43 /* MapMarkerWindow.swift */,
+				B895FE22245A052F00F3A53C /* AlertService.swift */,
+				B8900F43246202100045A992 /* MyCollectionViewCell.swift */,
+				B8900F44246202100045A992 /* MyCollectionViewCell.xib */,
 			);
 			path = JourneeTabbed;
 			sourceTree = "<group>";
@@ -176,14 +194,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8900F46246202100045A992 /* MyCollectionViewCell.xib in Resources */,
+				B8F3F4192465A620004B140A /* placeholder.jpg in Resources */,
 				B82EAD45244F86E600AC77C3 /* LaunchScreen.storyboard in Resources */,
 				B87442D42454716300B4DB43 /* MapMarkerWindowView.xib in Resources */,
 				B87442DC2454B6DA00B4DB43 /* icons-marker-48.png in Resources */,
 				B82EAD4D244FB8A600AC77C3 /* GoogleService-Info.plist in Resources */,
+				B895FE1F2459C2BA00F3A53C /* icon-star-filled.png in Resources */,
 				B87442D8245494AA00B4DB43 /* icons-marker-30.png in Resources */,
 				B82EAD42244F86E600AC77C3 /* Assets.xcassets in Resources */,
 				B82EAD40244F86E600AC77C3 /* Main.storyboard in Resources */,
 				B87442DA2454B65B00B4DB43 /* icons-marker-64.png in Resources */,
+				B895FE1E2459C2BA00F3A53C /* icon-star-empty.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +277,8 @@
 			files = (
 				B87442D6245472A300B4DB43 /* MapMarkerWindow.swift in Sources */,
 				B82EAD3D244F86E600AC77C3 /* SecondViewController.swift in Sources */,
+				B8900F45246202100045A992 /* MyCollectionViewCell.swift in Sources */,
+				B895FE23245A052F00F3A53C /* AlertService.swift in Sources */,
 				B82EAD3B244F86E600AC77C3 /* FirstViewController.swift in Sources */,
 				B89CCD102450708B00D44752 /* ThirdViewController.swift in Sources */,
 				B82EAD37244F86E600AC77C3 /* AppDelegate.swift in Sources */,

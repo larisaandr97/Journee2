@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "SecondViewController.saveVisit(_:):SecondViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "intRate">
+            </PersistentString>
+            <PersistentString
+               value = "indexClickedCell">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in FirstViewController.loadMarkersFromDB():FirstViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "spot[&quot;latitude&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FirstViewController.prepare(for:sender:):FirstViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in FirstViewController.loadMarkersFromDB():FirstViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FirstViewController.shareVisit(sender:):FirstViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "infoWindow.spotData">
+            </PersistentString>
+            <PersistentString
+               value = "infoWindow.spotData[&quot;latitude&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ThirdViewController.prepare(for:sender:):ThirdViewController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

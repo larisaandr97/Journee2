@@ -19,6 +19,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var starStackView: UIStackView!
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var chosenImage: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
     
     var arrImageViews: [UIImageView] = []
     var intStars = 5
@@ -44,9 +45,36 @@ class SecondViewController: UIViewController {
             adressLabel.text = clickedCell.addressLabel.text
             placeNameField.text = clickedCell.placeNameLabel.text
             descriptionField.text = clickedCell.descript
+            titleLabel.text="Edit visit"
             editStarStack()
+            let imageName = placeNameField.text?.replacingOccurrences(of: " ", with: "")
+            self.chosenImage.image = getImage(imageName: imageName!)
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated) // No need for semicolon
+        reloadInputViews()
+}
+    
+    func getDirectoryPath() -> String {
+          let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+          let documentsDirectory = paths[0]
+          return documentsDirectory
+      }
+    
+    func getImage(imageName : String)-> UIImage{
+               let fileManager = FileManager.default
+               let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent(imageName)
+               if fileManager.fileExists(atPath: imagePath){
+                   //hasImage = true
+                   return UIImage(contentsOfFile: imagePath)!
+               }else{
+                   //hasImage = false
+                   print("No Image available")
+                   return UIImage.init(named: "placeholder.jpg")! // Return placeholder image here
+               }
+           }
     
    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
@@ -63,28 +91,33 @@ class SecondViewController: UIViewController {
         print("nume: " + name)
         if(chosenImage.image != nil){
             saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
-       
         var newChild = [String:AnyObject] ()
         newChild["adress"] = adressLabel.text as AnyObject?
         newChild["name"] = placeNameField.text as AnyObject?
         newChild["date"] = dateField.text as AnyObject?
         newChild["description"] = descriptionField.text as AnyObject?
-        newChild["rate"] = intRate as AnyObject?
-        newChild["latitude"] = lat as AnyObject?
-        newChild["longitude"] = long as AnyObject?
-        
-     if (clicked == false){
-        self.ref.child("spots/\(currentIndex)").setValue(newChild)}
-    else{
-       self.ref.child("spots/\(indexClickedCell+1)").setValue(newChild)
-    }
+        if(intRate != ""){
+            newChild["rate"] = intRate as AnyObject?
+        }
+            
+        if (clicked == false){
+            newChild["latitude"] = lat as AnyObject?
+            newChild["longitude"] = long as AnyObject?
+            self.ref.child("spots/\(currentIndex)").setValue(newChild)}
+        else{
+           //fac update
+            self.ref.child("spots/\(indexClickedCell+1)").updateChildValues(newChild)
+            clicked = false
+        }
     
-        performSegue(withIdentifier: "savedVisit", sender: sender);
-        
+       // performSegue(withIdentifier: "savedVisit", sender: sender);
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelVisit(_ sender: Any) {
-         performSegue(withIdentifier: "savedVisit", sender: sender);
+        // performSegue(withIdentifier: "savedVisit", sender: sender);
+          self.dismiss(animated: true, completion: nil)
+        
     }
     
     @IBAction func chooseImage(_ sender: Any) {
@@ -113,6 +146,7 @@ class SecondViewController: UIViewController {
     
     func editStarStack(){
         let rating = Int (clickedCell.ratingLabel.text!.prefix(1)) ?? 0
+        
         arrImageViews.forEach({ (imageView) in
         //if ((location?.x)! > imageView.frame.origin.x){
             if (self.arrImageViews.firstIndex(of:imageView)! < rating ){

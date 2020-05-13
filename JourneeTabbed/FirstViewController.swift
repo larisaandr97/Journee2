@@ -30,7 +30,12 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let spots = ref.child("spots")
+        spots.observe(.childChanged, with: { (snapshot: DataSnapshot!) in
+                      print("Child changed")
+          
+                             })
+                 
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
     
@@ -45,7 +50,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         saved = false*/
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+            print("First view appeared")
+            super.viewWillAppear(animated) // No need for semicolon
+    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         if segue.destination is SecondViewController
@@ -73,7 +82,6 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
    func loadMarkersFromDB() {
             let spots = ref.child("spots")
         spots.observe(.childAdded, with: { (snapshot) in
-    //spots.observeSingleEvent(of: .value, with: { (snapshot) in
         if snapshot.value as? [String : AnyObject] != nil {
                     self.mapView.clear()
                     guard let spot = snapshot.value as? [String : AnyObject] else {
