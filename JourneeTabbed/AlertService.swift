@@ -2,17 +2,6 @@
 //  AlertService.swift
 //  JourneeTabbed
 //
-//  Created by user169887 on 4/29/20.
-//  Copyright © 2020 user169887. All rights reserved.
-
-
-//
-//  AlertService.swift
-//  JourneeTabbed
-//
-//  Created by user169887 on 4/29/20.
-//  Copyright © 2020 user169887. All rights reserved.
-//
 
 import UIKit
 

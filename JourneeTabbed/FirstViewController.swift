@@ -2,8 +2,6 @@
 //  FirstViewController.swift
 //  JourneeTabbed
 //
-//  Created by user169887 on 4/21/20.
-//  Copyright © 2020 user169887. All rights reserved.
 //
 
 import UIKit
@@ -64,9 +62,9 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     }
         
    func loadMarkersFromDB() {
-            let spots = ref.child("spots")
+        let spots = ref.child("spots")
         spots.observe(.childAdded, with: { (snapshot) in
-        if snapshot.value as? [String : AnyObject] != nil {
+            if snapshot.value as? [String : AnyObject] != nil {
                     self.mapView.clear()
                     guard let spot = snapshot.value as? [String : AnyObject] else {
                         return
@@ -93,14 +91,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         }
     
     @objc func addVisit(sender: UIButton){
-        print("Am intrat in functie!!!")
-       // performSegue(withIdentifier: "secondView", sender: self)
         performSegue(withIdentifier: "addVisit", sender: sender);
-        
     }
     
     @objc func shareVisit(sender: UIButton){
-        print("Share!")
+        print("Sharing...")
         let shareText = infoWindow.addressLabel.text
        
         if(hasImage == true){
@@ -117,7 +112,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
                                                                      applicationActivities: nil)
             if (UIDevice.current.userInterfaceIdiom == .phone) {
                     self.present(activityController, animated: true, completion: nil)
-                       }        }
+            }
+        }
     }
     
     func getDirectoryPath() -> String {
@@ -184,25 +180,25 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.notVisitedLabel.isHidden = true
             infoWindow.addVisitButton.isHidden = true
            
-            // Afisare imagine
+            // Displaying image
             let imageName = infoWindow.placeNameLabel.text?.replacingOccurrences(of: " ", with: "")
             infoWindow.imageView.image=getImage(imageName: imageName!)
             
             let geocoder = GMSGeocoder()
             let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
                 
-            // cautare adresa dupa coordonate
+            // finding address by coordinates
             geocoder.reverseGeocodeCoordinate(position) { response, error in
                 if (response?.firstResult()) != nil {
                     let currentAdress = response?.firstResult()?.thoroughfare!
-                self.infoWindow.addressLabel.text=currentAdress
+                    self.infoWindow.addressLabel.text=currentAdress
                 }
             }
             
             infoWindow.shareButton.addTarget(self,action:#selector(shareVisit(sender:)), for: .touchUpInside)
         }
             
-        else //Nu exista in baza de date inca
+        else //Doesn't exist in database yet
         {
             let geocoder = GMSGeocoder()
             let position = CLLocationCoordinate2DMake(marker.position.latitude ,marker.position.longitude )

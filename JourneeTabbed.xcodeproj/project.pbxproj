@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34EB119326766D62007281F9 /* ViewSignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EB119226766D62007281F9 /* ViewSignInController.swift */; };
 		8BF09DE787C7A36413D4EA3C /* Pods_JourneeTabbed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74C2C429E69272DDD3DA21D1 /* Pods_JourneeTabbed.framework */; };
 		B82EAD37244F86E600AC77C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82EAD36244F86E600AC77C3 /* AppDelegate.swift */; };
 		B82EAD39244F86E600AC77C3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82EAD38244F86E600AC77C3 /* SceneDelegate.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		3101EE95FC012C4BAEC2FB96 /* Pods-JourneeTabbed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JourneeTabbed.release.xcconfig"; path = "Target Support Files/Pods-JourneeTabbed/Pods-JourneeTabbed.release.xcconfig"; sourceTree = "<group>"; };
 		3354DFC3A1478A78FC36E31A /* Pods-JourneeTabbed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JourneeTabbed.debug.xcconfig"; path = "Target Support Files/Pods-JourneeTabbed/Pods-JourneeTabbed.debug.xcconfig"; sourceTree = "<group>"; };
+		34EB119226766D62007281F9 /* ViewSignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSignInController.swift; sourceTree = "<group>"; };
 		74C2C429E69272DDD3DA21D1 /* Pods_JourneeTabbed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JourneeTabbed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B82EAD33244F86E600AC77C3 /* JourneeTabbed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JourneeTabbed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B82EAD36244F86E600AC77C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,8 +101,8 @@
 				B82EAD4C244FB8A600AC77C3 /* GoogleService-Info.plist */,
 				B82EAD36244F86E600AC77C3 /* AppDelegate.swift */,
 				B82EAD38244F86E600AC77C3 /* SceneDelegate.swift */,
-				B82EAD3A244F86E600AC77C3 /* FirstViewController.swift */,
 				B82EAD3C244F86E600AC77C3 /* SecondViewController.swift */,
+				B82EAD3A244F86E600AC77C3 /* FirstViewController.swift */,
 				B82EAD3E244F86E600AC77C3 /* Main.storyboard */,
 				B82EAD41244F86E600AC77C3 /* Assets.xcassets */,
 				B82EAD43244F86E600AC77C3 /* LaunchScreen.storyboard */,
@@ -111,6 +113,7 @@
 				B895FE22245A052F00F3A53C /* AlertService.swift */,
 				B8900F43246202100045A992 /* MyCollectionViewCell.swift */,
 				B8900F44246202100045A992 /* MyCollectionViewCell.xib */,
+				34EB119226766D62007281F9 /* ViewSignInController.swift */,
 			);
 			path = JourneeTabbed;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 			files = (
 				B87442D6245472A300B4DB43 /* MapMarkerWindow.swift in Sources */,
 				B82EAD3D244F86E600AC77C3 /* SecondViewController.swift in Sources */,
+				34EB119326766D62007281F9 /* ViewSignInController.swift in Sources */,
 				B8900F45246202100045A992 /* MyCollectionViewCell.swift in Sources */,
 				B895FE23245A052F00F3A53C /* AlertService.swift in Sources */,
 				B82EAD3B244F86E600AC77C3 /* FirstViewController.swift in Sources */,

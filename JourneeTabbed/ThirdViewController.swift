@@ -2,9 +2,6 @@
 //  ThirdViewController.swift
 //  JourneeTabbed
 //
-//  Created by user169887 on 4/22/20.
-//  Copyright © 2020 user169887. All rights reserved.
-//
 
 import UIKit
 import FirebaseDatabase
@@ -21,7 +18,7 @@ class ThirdViewController: UIViewController{
     
         override func viewDidLoad() {
             super.viewDidLoad()
-            print("Am intrat")
+           
             collectionView.reloadData()
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
@@ -61,12 +58,13 @@ class ThirdViewController: UIViewController{
                 vc?.clickedCell = self.clickedCell
                 vc?.clicked = true
                 vc?.indexClickedCell = self.clickedCellIndex
-                vc?.ref=self.ref           }
+                vc?.ref=self.ref
+           }
         
        }
     
     func getRandomColor() -> UIColor {
-         //Generate between 0 to 1
+         //Generate float between 0 and 1
          let red:CGFloat = CGFloat(drand48())
          let green:CGFloat = CGFloat(drand48())
          let blue:CGFloat = CGFloat(drand48())
@@ -94,7 +92,7 @@ extension ThirdViewController: UICollectionViewDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-         print("Am apasat pe cel de-al " + String(indexPath.row))
+        // print("Am apasat pe cel de-al " + String(indexPath.row))
         self.clickedCell = collectionView.cellForItem(at: indexPath) as! MyCollectionViewCell
         self.clickedCellIndex = indexPath.row
         performSegue(withIdentifier: "editVisit", sender: nil);
@@ -134,7 +132,7 @@ extension ThirdViewController: UICollectionViewDataSource{
         if(spot["image"] != nil){
             cell.image = (spot["image"] as? String)!
         }
-       cell.contentView.layer.cornerRadius = 2.0
+        cell.contentView.layer.cornerRadius = 2.0
         cell.contentView.layer.borderWidth = 1.0
         cell.contentView.layer.borderColor = UIColor.clear.cgColor
         cell.contentView.layer.masksToBounds = true

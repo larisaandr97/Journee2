@@ -8,6 +8,9 @@ target 'JourneeTabbed' do
   # Pods for JourneeTabbed
   pod 'Firebase/Analytics'
   pod 'Firebase/Database'
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'TinyConstraints'

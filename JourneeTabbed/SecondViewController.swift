@@ -2,9 +2,6 @@
 //  SecondViewController.swift
 //  JourneeTabbed
 //
-//  Created by user169887 on 4/21/20.
-//  Copyright © 2020 user169887. All rights reserved.
-//
 
 import UIKit
 import Firebase
@@ -107,7 +104,7 @@ class SecondViewController: UIViewController {
    
     @IBAction func saveVisit(_ sender: Any) {
         let name = placeNameField.text! as String
-        print("nume: " + name)
+       // print("nume: " + name)
         if(chosenImage.image != nil){
             saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
         var newChild = [String:AnyObject] ()
@@ -171,7 +168,7 @@ class SecondViewController: UIViewController {
         else{
                 imageView.image=UIImage(named:"icon-star-empty.png")
         }
-    })
+        })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
