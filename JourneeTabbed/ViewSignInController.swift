@@ -11,6 +11,7 @@ import GoogleSignIn
 
 class ViewSignInController: UIViewController {
     @IBOutlet var signInButton : GIDSignInButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if(GIDSignIn.sharedInstance()?.presentingViewController == nil){
@@ -21,6 +22,11 @@ class ViewSignInController: UIViewController {
         }
         else{
             GIDSignIn.sharedInstance()?.signIn()
+            print("Came back here after LOGIN")
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let firstView = storyboard.instantiateViewController(withIdentifier: "firstView")
+//            self.present(firstView, animated: false, completion: nil)
+          //  print()
         }
         GIDSignIn.sharedInstance()?.presentingViewController = self
     }

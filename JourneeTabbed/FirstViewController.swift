@@ -26,6 +26,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     var long: Double=0
     var hasImage: Bool=false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
             

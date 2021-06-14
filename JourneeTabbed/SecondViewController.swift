@@ -78,6 +78,7 @@ class SecondViewController: UIViewController {
         }
     }
     
+    // MARK: - Add Notification
     func addNotification(){
            let center = UNUserNotificationCenter.current()
                   center.requestAuthorization(options: [.alert, .sound, .badge]) {
@@ -102,8 +103,11 @@ class SecondViewController: UIViewController {
                   }
        }
    
+    // MARK: - Save Visit
     @IBAction func saveVisit(_ sender: Any) {
         let name = placeNameField.text! as String
+        let userUid =  Auth.auth().currentUser?.uid
+        print("UserUID: " + userUid!)
        // print("nume: " + name)
         if(chosenImage.image != nil){
             saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
@@ -119,7 +123,7 @@ class SecondViewController: UIViewController {
         if (clicked == false){
             newChild["latitude"] = lat as AnyObject?
             newChild["longitude"] = long as AnyObject?
-            self.ref.child("spots/\(currentIndex)").setValue(newChild)}
+            self.ref.child("users/\(userUid!)/spots/\(currentIndex)").setValue(newChild)}
         else{
            //fac update
             self.ref.child("spots/\(indexClickedCell+1)").updateChildValues(newChild)

@@ -11,6 +11,7 @@ target 'JourneeTabbed' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
+  pod 'CodableFirebase'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'TinyConstraints'
