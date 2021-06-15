@@ -341,6 +341,15 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRs-TW-F3Q">
+                                <rect key="frame" x="154" y="511" width="83" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal" title="Sign Out"/>
+                                <connections>
+                                    <action selector="logOut:" destination="JLc-Uc-UAE" eventType="touchUpInside" id="ntU-Ye-c9c"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ey9-fp-mfG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -363,7 +372,7 @@
         <!--View Sign In Controller-->
         <scene sceneID="sQ5-i0-uSV">
             <objects>
-                <viewController id="bdy-PF-DQ1" customClass="ViewSignInController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="signInView" id="bdy-PF-DQ1" customClass="ViewSignInController" customModule="JourneeTabbed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vfM-up-0qg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

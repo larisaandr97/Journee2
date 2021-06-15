@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
               didSignInFor user: GIDGoogleUser!,
               withError error: Error!) {
         if user != nil{
-            print("User email:" + user.profile.email )}
+//            print("User email:" + user.profile.email )}
         // Check for sign in error
         if let error = error {
             if (error as NSError).code == GIDSignInErrorCode.hasNoAuthInKeychain.rawValue {
@@ -61,31 +61,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
             }
             return
         }
-        
+           
         // Get credential object using Google ID token and Google access token
         guard let authentication = user.authentication else {
             return
         }
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                        accessToken: authentication.accessToken)
-        
+    
+           
         // Authenticate with Firebase using the credential object
         Auth.auth().signIn(with: credential) { (authResult, error) in
             if let error = error {
                 print("Error occurs when authenticate with Firebase: \(error.localizedDescription)")
             }
-                
-            // Post notification after user successfully sign in
-           // NotificationCenter.default.post(name: .signInGoogleCompleted, object: nil)
+            
             let user = Auth.auth().currentUser
-            saveUserToDatabase(user: user!)
-            print("USER AUTHENTICATED SUCCESSFULLY!!!")
+            if let isNewUser: Bool = authResult?.additionalUserInfo?.isNewUser {
+               if isNewUser {
+                  print("new user")
+                saveUserToDatabase(user: user!)
+               }
+            }
+                
+           
+            
+//            if (Auth.auth().currentUser.metadata.cre == Auth.auth().currentUser.metadata.lastSignInTime) {
+//                    // sign up
+//                } else {
+//                    // login
+//                }
+//            saveUserToDatabase(user: user!)
+            print("User with email " + (user?.email)! + " authenticated successfully")
+            
             // redirects to signed in user view controller
-                let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = mainStoryboard.instantiateViewController(withIdentifier: "tabBarController")
-//                vc.modalPresentationStyle = .fullScreen
-                UIApplication.shared.windows.first?.rootViewController? = vc
-                UIApplication.shared.windows.first?.makeKeyAndVisible()
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = mainStoryboard.instantiateViewController(withIdentifier: "tabBarController")
+            UIApplication.shared.windows.first?.rootViewController? = vc
+            UIApplication.shared.windows.first?.makeKeyAndVisible()
            
         }
         
@@ -93,12 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
             let userObject = UserModel(uid:user.uid, name:user.displayName!, email:user.email!)
             let data = try! FirebaseEncoder().encode(userObject)
             Database.database().reference().child("users/\(userObject.uid)").setValue(data)}
-
             
         }
-
-    
-
 
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
@@ -124,4 +133,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate{
 
 
 }
-
+}

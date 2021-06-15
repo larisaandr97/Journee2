@@ -9,6 +9,8 @@
 import UIKit
 import GoogleSignIn
 import FirebaseAuth
+import Firebase
+import FirebaseDatabase
 
 class ProfileViewController: UIViewController {
 
@@ -16,24 +18,28 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var placesVisitedLabel: UILabel!
     
+    @IBAction func logOut(_ sender: UIButton) {
+        GIDSignIn.sharedInstance().signOut()
+        print("User logged out.")
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+           if let viewController = mainStoryboard.instantiateViewController(withIdentifier: "signInView") as? UIViewController {
+               self.present(viewController, animated: true, completion: nil)
+           }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let user =  Auth.auth().currentUser
         nameLabel.text = user?.displayName
         emailLabel.text = user?.email
-        // Do any additional setup after loading the view.
+        
+        let userUid = Auth.auth().currentUser?.uid
+        let spots = Database.database().reference().child("users/\(userUid!)/spots")
+        spots.observe(.value, with: { (snapshot: DataSnapshot!) in
+            print("Count: " + String(snapshot.childrenCount))
+            self.placesVisitedLabel.text = String(snapshot.childrenCount)
+        
+        })
     }
-    
-
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

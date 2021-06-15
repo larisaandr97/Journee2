@@ -25,6 +25,8 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
     var lat: Double=0
     var long: Double=0
     var hasImage: Bool=false
+    var currLat: Double = 0
+    var currLong: Double = 0
     
     
     override func viewDidLoad() {
@@ -61,9 +63,11 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         let infoWindow = MapMarkerWindow.instanceFromNib() as! MapMarkerWindow
         return infoWindow
     }
-        
+     
+    // MARK: - Load Spots from Database
    func loadMarkersFromDB() {
-        let spots = ref.child("spots")
+        let userUid = Auth.auth().currentUser?.uid
+        let spots = ref.child("users/\(userUid!)/spots")
         spots.observe(.childAdded, with: { (snapshot) in
             if snapshot.value as? [String : AnyObject] != nil {
                     self.mapView.clear()
@@ -95,6 +99,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         performSegue(withIdentifier: "addVisit", sender: sender);
     }
     
+    // MARK: - Share Visit
     @objc func shareVisit(sender: UIButton){
         print("Sharing...")
         let shareText = infoWindow.addressLabel.text
@@ -117,12 +122,32 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         }
     }
     
+    // MARK: - Get Directions
+    @objc func getDirections(sender: UIButton){
+        print("Getting directions...")
+        
+        // if the device has google maps installed in it
+        if (UIApplication.shared.canOpenURL(NSURL(string:"comgooglemaps://")! as URL)) {
+                
+            UIApplication.shared.openURL(NSURL(string: "comgooglemaps://?saddr=&daddr=\(self.lat),\(self.long)&directionsmode=driving")! as URL)
+                }
+        // if google maps is not installed, try apple map
+
+        else if (UIApplication.shared.canOpenURL(NSURL(string:"http://maps.apple.com/maps")! as URL)) {
+                    // apple map
+            let url = "http://maps.apple.com/maps?saddr=\(self.currLat),\(self.currLong)&daddr=\(self.lat),\(self.long)"
+                    UIApplication.shared.openURL(URL(string:url)!)
+                }
+        // if apple map is also not there, it will show an appStore link to download apple map application.
+    }
+    
     func getDirectoryPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
     
+    // MARK: - Get Image
     func getImage(imageName : String)-> UIImage{
             let fileManager = FileManager.default
             let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent(imageName)
@@ -136,6 +161,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             }
         }
     
+    // MARK: - DidTap Marker
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
        
         var hasData = true
@@ -169,7 +195,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
         infoWindow.layer.borderWidth = 2
         infoWindow.layer.borderColor = UIColor(named: "19E698")?.cgColor
         infoWindow.addVisitButton.layer.cornerRadius = infoWindow.addVisitButton.frame.height / 2
-            
+
         if hasData==true
         {
             let name = markerData!["name"]!
@@ -180,12 +206,15 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.rate.text = (rate as! String) + "/5"
             infoWindow.notVisitedLabel.isHidden = true
             infoWindow.addVisitButton.isHidden = true
+            infoWindow.getDirectionsButton.isHidden = false
            
             // Displaying image
             let imageName = infoWindow.placeNameLabel.text?.replacingOccurrences(of: " ", with: "")
             infoWindow.imageView.image=getImage(imageName: imageName!)
             
             let geocoder = GMSGeocoder()
+            self.lat = markerData!["latitude"] as! CLLocationDegrees
+            self.long = markerData!["longitude"] as! CLLocationDegrees
             let position = CLLocationCoordinate2DMake(markerData!["latitude"] as! CLLocationDegrees,markerData!["longitude"] as! CLLocationDegrees)
                 
             // finding address by coordinates
@@ -197,6 +226,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             }
             
             infoWindow.shareButton.addTarget(self,action:#selector(shareVisit(sender:)), for: .touchUpInside)
+            infoWindow.getDirectionsButton.addTarget(self,action:#selector(getDirections(sender:)), for: .touchUpInside)
         }
             
         else //Doesn't exist in database yet
@@ -216,6 +246,7 @@ class FirstViewController: UIViewController ,GMSMapViewDelegate{
             infoWindow.dateVisitedLabel.text="";
             infoWindow.rate.text="";
             infoWindow.shareButton.isHidden = true
+            infoWindow.getDirectionsButton.isHidden = true
             infoWindow.addVisitButton.addTarget(self,action:#selector(addVisit(sender:)), for: .touchUpInside)
         }
         
@@ -277,6 +308,8 @@ extension FirstViewController: CLLocationManagerDelegate {
     guard let location = locations.first else {
       return
     }
+    self.currLat = location.coordinate.latitude
+    self.currLong = location.coordinate.longitude
     mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
     locationManager.stopUpdatingLocation()
   }

@@ -7,6 +7,9 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 import UserNotifications
+import GoogleSignIn
+import FirebaseAuth
+import CodableFirebase
 
 class SecondViewController: UIViewController {
     
@@ -35,7 +38,7 @@ class SecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        adressLabel.text = address
+        adressLabel.text = self.address
         setStarStack()
         if(clicked == true)
         {
@@ -57,6 +60,7 @@ class SecondViewController: UIViewController {
           return documentsDirectory
       }
     
+    // MARK: - Get Image
     func getImage(imageName : String)-> UIImage{
                let fileManager = FileManager.default
                let imagePath = (self.getDirectoryPath() as NSString).appendingPathComponent(imageName)
@@ -103,39 +107,43 @@ class SecondViewController: UIViewController {
                   }
        }
    
+    struct SpotModel : Codable {
+        let uid: Int
+        let name: String
+        let date: String
+        let address: String
+        let description: String
+        let rate: String
+        let longitude: Double
+        let latitude: Double
+    }
+    
     // MARK: - Save Visit
     @IBAction func saveVisit(_ sender: Any) {
         let name = placeNameField.text! as String
         let userUid =  Auth.auth().currentUser?.uid
-        print("UserUID: " + userUid!)
-       // print("nume: " + name)
+        
         if(chosenImage.image != nil){
-            saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))}
-        var newChild = [String:AnyObject] ()
-        newChild["adress"] = adressLabel.text as AnyObject?
-        newChild["name"] = placeNameField.text as AnyObject?
-        newChild["date"] = dateField.text as AnyObject?
-        newChild["description"] = descriptionField.text as AnyObject?
-        if(intRate != ""){
-            newChild["rate"] = intRate as AnyObject?
-        }
+            saveImage(imageName: name.replacingOccurrences(of: " ", with: ""))
             
+        }
+    
+        let spotObject = SpotModel(uid:currentIndex as Int, name:placeNameField.text! as String, date:dateField.text! as String, address:adressLabel.text! as String, description:descriptionField.text! as String, rate:intRate as String, longitude:long as Double, latitude:lat as Double)
+        let data = try! FirebaseEncoder().encode(spotObject)
+        
         if (clicked == false){
-            newChild["latitude"] = lat as AnyObject?
-            newChild["longitude"] = long as AnyObject?
-            self.ref.child("users/\(userUid!)/spots/\(currentIndex)").setValue(newChild)}
+            Database.database().reference().child("users/\(userUid!)/spots/\(currentIndex)").setValue(data)
+        }
         else{
-           //fac update
-            self.ref.child("spots/\(indexClickedCell+1)").updateChildValues(newChild)
+           //Update spot
+            Database.database().reference().child("users/\(userUid!)/spots/\(indexClickedCell+1)").updateChildValues(data as! [AnyHashable : Any])
             clicked = false
         }
         addNotification()
-       // performSegue(withIdentifier: "savedVisit", sender: sender);
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelVisit(_ sender: Any) {
-        // performSegue(withIdentifier: "savedVisit", sender: sender);
           self.dismiss(animated: true, completion: nil)
     }
     
@@ -144,6 +152,7 @@ class SecondViewController: UIViewController {
         //showChooseSourceTypeAlertController()
     }
     
+    // MARK: - Create Star Stack
     func setStarStack(){
         starStackView.axis = NSLayoutConstraint.Axis.horizontal
         starStackView.distribution = .fillEqually
@@ -209,6 +218,7 @@ class SecondViewController: UIViewController {
         }
     }
 
+    // MARK: - Save image
    func saveImage(imageName: String){
       //create an instance of the FileManager
       let fileManager = FileManager.default

@@ -5,6 +5,8 @@
 
 import UIKit
 import FirebaseDatabase
+import GoogleSignIn
+import FirebaseAuth
 
 class ThirdViewController: UIViewController{
 
@@ -25,7 +27,9 @@ class ThirdViewController: UIViewController{
             layout.itemSize = CGSize(width: 120,height: 120)
             collectionView.collectionViewLayout=layout
             
-            let spots = ref.child("spots")
+//            let spots = ref.child("spots")
+            let userUid = Auth.auth().currentUser?.uid
+            let spots = ref.child("users/\(userUid!)/spots")
             spots.observe(.value, with: { (snapshot: DataSnapshot!) in
                 print("Count: " + String(snapshot.childrenCount))
                 self.count = Int(snapshot.childrenCount)
@@ -57,8 +61,10 @@ class ThirdViewController: UIViewController{
                let vc = segue.destination as? SecondViewController
                 vc?.clickedCell = self.clickedCell
                 vc?.clicked = true
+//                vc?.address = self.clickedCell.addressLabel.text!
                 vc?.indexClickedCell = self.clickedCellIndex
                 vc?.ref=self.ref
+            
            }
         
        }
@@ -71,14 +77,18 @@ class ThirdViewController: UIViewController{
          return UIColor(red:red, green: green, blue: blue, alpha: 1.0)
     }
     
+    // MARK: - Get Data of Spots
     func getData()
     {
-         let spots = ref.child("spots")
+//         let spots = ref.child("spots")
+        let userUid = Auth.auth().currentUser?.uid
+        let spots = ref.child("users/\(userUid!)/spots")
         spots.observe(.childAdded, with: { (snapshot) in
                if snapshot.value as? [String : AnyObject] != nil {
                 self.spotsArray.append(snapshot)
             }
         }, withCancel: nil)
+
     }
     }
 
@@ -123,7 +133,7 @@ extension ThirdViewController: UICollectionViewDataSource{
         
         let spotSnapshot: DataSnapshot! = self.spotsArray[indexPath.row]
         let spot = spotSnapshot.value as! Dictionary<String,Any>
-        cell.addressLabel.text = spot["adress"] as? String
+        cell.addressLabel.text = spot["address"] as? String
         cell.placeNameLabel.text = spot["name"] as? String
         cell.ratingLabel.text = spot["rate"]! as! String  + "/5"
         cell.dateLabel.text = spot["date"] as? String

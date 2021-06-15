@@ -22,11 +22,7 @@ class ViewSignInController: UIViewController {
         }
         else{
             GIDSignIn.sharedInstance()?.signIn()
-            print("Came back here after LOGIN")
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let firstView = storyboard.instantiateViewController(withIdentifier: "firstView")
-//            self.present(firstView, animated: false, completion: nil)
-          //  print()
+//            print("Came back here after LOGIN")
         }
         GIDSignIn.sharedInstance()?.presentingViewController = self
     }
